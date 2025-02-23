@@ -1,14 +1,22 @@
+"use server";
 import { createSupabaseServerComponentClient } from "@/lib/supabase/server-client";
 import LoginButton from "./login-button";
 import LogoutButton from "./logout-button";
-
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 export default async function NavBar() {
-  const {
-    data: { session },
-    error,
-  } = await createSupabaseServerComponentClient().auth.getSession();
+  const { data, error } = await (
+    await createSupabaseServerComponentClient()
+  ).auth.getUser();
 
-  const user = session?.user;
-
-  return <>{user ? <LogoutButton /> : <LoginButton />}</>;
+  return (
+    <>
+      {data?.user && (
+        <>
+          <p>Hello {data?.user?.email} </p>
+          <LogoutButton />
+        </>
+      ) || <LoginButton />}
+    </>
+  );
 }
