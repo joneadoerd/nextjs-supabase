@@ -4,21 +4,31 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { createSupabaseServerClient } from '@/lib/supabase/server-client'
+export async function getCurrentUserRole(userId: string) {
+  const supabase = await createSupabaseServerClient()
+  const { data, error } = await supabase
+    .from('user_roles')
+    .select('role')
+      .eq('user_id', userId)
+    .single();
 
+  return error ? null : data?.role;
+}
 export async function login(formData: FormData) {
   const supabase = await createSupabaseServerClient()
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
-  const data = {
+  const input = {
     email: formData.get('email') as string,
     password: formData.get('password') as string,
   }
 
-  const { error } = await supabase.auth.signInWithPassword(data)
+  const { data,error } = await supabase.auth.signInWithPassword(input)
 
   if (error) {
-    redirect('/error')
+    console.error(error)
+    throw new Error(error.message)
   }
 
   revalidatePath('/', 'layout')
