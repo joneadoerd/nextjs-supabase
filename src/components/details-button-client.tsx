@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { type User } from "@supabase/supabase-js";
 import Link from "next/link";
+import { Database } from "@/lib/supabase/database.types";
 
-export default function DetailsButtonClient({ user }: { user: User | null }) {
+export default function DetailsButtonClient({ user ,customer ,subscriptions }: { user: User | null ,customer: Database["public"]["Tables"]["customers"]["Row"]| null ,subscriptions: Database["public"]["Tables"]["subscriptions"]["Row"]| null}) {
   const [isHidden, setIsHidden] = useState(true);
 
   return (
@@ -19,7 +20,8 @@ export default function DetailsButtonClient({ user }: { user: User | null }) {
 
           {isHidden ? null : (
             <>
-              <p>{`username: ${user?.user_metadata?.full_name}`}</p>
+              <p>{`username: ${customer?.name}`}</p>
+              <p> {`subscriptions status: ${subscriptions?.subscriptions_status}`}</p>
               <p>{`email: ${user?.email}`}</p>
 
               <br />

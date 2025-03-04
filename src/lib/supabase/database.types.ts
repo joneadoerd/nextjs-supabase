@@ -9,65 +9,71 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      services: {
+      customers: {
         Row: {
-          description: string
+          address: string | null
+          created_at: string
           id: string
-          is_active: boolean
-          name: string
+          name: string | null
+          phone_number: number | null
           user_id: string
         }
         Insert: {
-          description: string
+          address?: string | null
+          created_at?: string
           id?: string
-          is_active?: boolean
-          name: string
+          name?: string | null
+          phone_number?: number | null
           user_id: string
         }
         Update: {
-          description?: string
+          address?: string | null
+          created_at?: string
           id?: string
-          is_active?: boolean
-          name?: string
+          name?: string | null
+          phone_number?: number | null
           user_id?: string
         }
         Relationships: []
       }
       subscriptions: {
         Row: {
-          expires_at: string
+          created_at: string
+          end_date: string | null
           id: string
-          user_id: string | null
+          start_date: string
+          subscriptions_status: Database["public"]["Enums"]["subscriptions_status"]
+          user_id: string
         }
         Insert: {
-          expires_at: string
+          created_at?: string
+          end_date?: string | null
           id?: string
-          user_id?: string | null
+          start_date?: string
+          subscriptions_status?: Database["public"]["Enums"]["subscriptions_status"]
+          user_id: string
         }
         Update: {
-          expires_at?: string
+          created_at?: string
+          end_date?: string | null
           id?: string
-          user_id?: string | null
+          start_date?: string
+          subscriptions_status?: Database["public"]["Enums"]["subscriptions_status"]
+          user_id?: string
         }
         Relationships: []
       }
       user_roles: {
         Row: {
-          created_at: string
-          id: string
-          role: Database["public"]["Enums"]["user_role"]
+          role: Database["public"]["Enums"]["app_roles"]
           user_id: string
         }
         Insert: {
-          created_at: string
-          id?: string
-          role: Database["public"]["Enums"]["user_role"]
+          role?: Database["public"]["Enums"]["app_roles"]
           user_id: string
         }
         Update: {
-          created_at?: string
-          id?: string
-          role?: Database["public"]["Enums"]["user_role"]
+          role?: Database["public"]["Enums"]["app_roles"]
           user_id?: string
         }
         Relationships: []
@@ -77,37 +83,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      add_policy_to_authenticated_users: {
-        Args: {
-          table_name: string
-          permission_type: string
-        }
-        Returns: undefined
-      }
-      authorize: {
-        Args: {
-          requested_permission: Database["public"]["Enums"]["app_permission"]
-        }
-        Returns: boolean
-      }
-      check_user_permission_with_claims: {
-        Args: {
-          table_name: string
-          action_required: string
-        }
-        Returns: boolean
-      }
-      custom_access_token_hook: {
-        Args: {
-          event: Json
-        }
-        Returns: Json
-      }
+      [_ in never]: never
     }
     Enums: {
-      app_permission: "channels.delete" | "messages.delete"
-      app_role: "admin" | "moderator"
-      user_role: "user" | "admin" | "client"
+      app_roles: "admin" | "client"
+      subscriptions_status: "active" | "expired"
     }
     CompositeTypes: {
       [_ in never]: never
