@@ -1,3 +1,5 @@
+CREATE TYPE app_roles AS ENUM ('admin', 'client');
+
 -- Create the user_roles table with RLS enabled
 CREATE TABLE IF NOT EXISTS public.user_roles (
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
